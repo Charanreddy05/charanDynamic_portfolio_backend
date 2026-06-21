@@ -1,14 +1,32 @@
 const multer = require("multer");
-const path = require("path");
+const { CloudinaryStorage } = require("multer-storage-cloudinary");
+const cloudinary = require("../config/cloudinary");
 
-const makeStorage = (folder) =>
-  multer.diskStorage({
-    destination: (req, file, cb) => cb(null, `uploads/${folder}`),
-    filename: (req, file, cb) =>
-      cb(null, Date.now() + path.extname(file.originalname)),
-  });
+const profileStorage = new CloudinaryStorage({
+  cloudinary,
+  params: {
+    folder: "profile",
+    allowed_formats: ["jpg", "jpeg", "png", "webp"],
+  },
+});
 
-const uploadProfile     = multer({ storage: makeStorage("profile") });
-const uploadCertificate = multer({ storage: makeStorage("certificates") });
+const certificateStorage = new CloudinaryStorage({
+  cloudinary,
+  params: {
+    folder: "certificates",
+    allowed_formats: ["jpg", "jpeg", "png", "pdf"],
+  },
+});
 
-module.exports = { uploadProfile, uploadCertificate };
+const uploadProfile = multer({
+  storage: profileStorage,
+});
+
+const uploadCertificate = multer({
+  storage: certificateStorage,
+});
+
+module.exports = {
+  uploadProfile,
+  uploadCertificate,
+};

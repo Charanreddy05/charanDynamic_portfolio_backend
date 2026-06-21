@@ -8,6 +8,7 @@ async(req,res)=>{
    success:true,
 
    imageUrl:
+//    `http://localhost:5000/uploads/profile/${req.file.filename}`
    `http://localhost:5000/uploads/profile/${req.file.filename}`
 
   });
